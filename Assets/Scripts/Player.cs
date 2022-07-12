@@ -19,8 +19,12 @@ public class Player : MonoBehaviour
 
     private bool _isTripleActive = false;
     private bool _isSpeedBoostActive = false;
+    private bool _isShieldActive = false;
     [SerializeField]
     private GameObject _tripleShotPrefab;
+
+    [SerializeField]
+    private GameObject _playerShield;
 
 
     void Start()
@@ -88,17 +92,24 @@ public class Player : MonoBehaviour
             }
             
         }
+
     }
 
     public void Damage()
     {
-        _lifes--;
-
-        if(_lifes < 1)
+        if (_isShieldActive)
         {
-            _spawnManager.onPlayerDead();
-            Destroy(this.gameObject);
+            _isShieldActive = false;
+            _playerShield.SetActive(false);
+            return;
         }
+            _lifes--;
+
+            if (_lifes < 1)
+            {
+                _spawnManager.onPlayerDead();
+                Destroy(this.gameObject);
+            }
     }
 
 
@@ -111,8 +122,14 @@ public class Player : MonoBehaviour
     public void activatePowerUpSpeed()
     {
         _isSpeedBoostActive = true;
-        _speed = 5;
+        _speed = 8f;
         StartCoroutine(PowerDownSpeedPowerUp());
+    }
+
+    public void activatePowerUpShield()
+    {
+        _isShieldActive = true;
+        _playerShield.SetActive(_isShieldActive);
     }
 
     IEnumerator PowerDownTripleShot()
@@ -129,10 +146,9 @@ public class Player : MonoBehaviour
         while (_isSpeedBoostActive)
         {
             yield return new WaitForSeconds(5);
-            _speed = 3f;
+            _speed = 5f;
             _isSpeedBoostActive = false;
         }
     }
-    
 }
  

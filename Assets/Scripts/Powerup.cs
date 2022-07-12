@@ -44,6 +44,9 @@ public class Powerup : MonoBehaviour
                     playerComponent.activatePowerUpSpeed();
                     break;
                 case 2:
+                    playerComponent.activatePowerUpShield();
+                    break;
+                case 3:
                     break;
             }
             

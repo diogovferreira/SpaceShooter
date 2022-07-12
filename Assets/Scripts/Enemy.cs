@@ -48,11 +48,9 @@ private void OnTriggerEnter2D(Collider2D collision){
                 player.Damage();
             }
 
-            collision.transform.GetComponent<Player>().Damage();
-
         }else if(collision.tag == "Laser")
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             Destroy(collision.gameObject);
         }
     }
