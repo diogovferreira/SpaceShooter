@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private float _canFire = -1;
 
     [SerializeField]
-    private int _lifes = 3;
+    private int _lives = 3;
 
     [SerializeField]
     private float _fireRate = 0.5f;
@@ -26,15 +26,29 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _playerShield;
 
+    [SerializeField]
+    private int _score;
+
+    private UIManager _uIManager;
+
+    
 
     void Start()
     {
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         if(_spawnManager == null)
         {
             Debug.Log("Spawn Manager is null");
         }
+
+        if(_uIManager == null)
+        {
+            Debug.Log("UI Manager is null");
+        }
+
+        _uIManager.updateLives(_lives);
     }
 
     void Update()
@@ -103,9 +117,10 @@ public class Player : MonoBehaviour
             _playerShield.SetActive(false);
             return;
         }
-            _lifes--;
+            _lives--;
+            _uIManager.updateLives(_lives);
 
-            if (_lifes < 1)
+            if (_lives < 1)
             {
                 _spawnManager.onPlayerDead();
                 Destroy(this.gameObject);
@@ -149,6 +164,20 @@ public class Player : MonoBehaviour
             _speed = 5f;
             _isSpeedBoostActive = false;
         }
+    }
+
+    public void addToScore(int points)
+    {
+        //increment score
+        _score += points;
+        //Communicate to UIManager
+        _uIManager.addToScore(_score);
+ 
+    }
+
+    public void decreaseLives(int currentLives)
+    {
+        _uIManager.updateLives(currentLives);
     }
 }
  
