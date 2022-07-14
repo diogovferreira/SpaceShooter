@@ -31,7 +31,12 @@ public class Player : MonoBehaviour
 
     private UIManager _uIManager;
 
-    
+    [SerializeField]
+    private GameObject _rightEngine;
+    [SerializeField]
+    private GameObject _leftEngine;
+
+
 
     void Start()
     {
@@ -40,12 +45,12 @@ public class Player : MonoBehaviour
 
         if(_spawnManager == null)
         {
-            Debug.Log("Spawn Manager is null");
+            Debug.Log("Spawn Manager is NULL");
         }
 
         if(_uIManager == null)
         {
-            Debug.Log("UI Manager is null");
+            Debug.Log("UI Manager is NULL");
         }
 
         _uIManager.updateLives(_lives);
@@ -62,8 +67,6 @@ public class Player : MonoBehaviour
     {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
-
-
 
         Vector3 directon = new Vector3(horizontal, vertical, 0);
         transform.Translate(directon * _speed * Time.deltaTime);
@@ -118,7 +121,21 @@ public class Player : MonoBehaviour
             return;
         }
             _lives--;
-            _uIManager.updateLives(_lives);
+
+        if(_lives == 2)
+        {
+            _rightEngine.SetActive(true);
+        }else if(_lives == 1)
+        {
+            _leftEngine.SetActive(true);
+        }
+        else
+        {
+            _rightEngine.SetActive(false);
+            _leftEngine.SetActive(false);
+
+        }
+        _uIManager.updateLives(_lives);
 
             if (_lives < 1)
             {
@@ -179,5 +196,6 @@ public class Player : MonoBehaviour
     {
         _uIManager.updateLives(currentLives);
     }
+
 }
  
