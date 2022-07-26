@@ -36,12 +36,15 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject _leftEngine;
 
-
+    [SerializeField]
+    private AudioClip[] _audioClips;
+    private AudioSource _audioSource;
 
     void Start()
     {
         _spawnManager = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
         _uIManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _audioSource = GetComponent<AudioSource>();
 
         if(_spawnManager == null)
         {
@@ -51,6 +54,15 @@ public class Player : MonoBehaviour
         if(_uIManager == null)
         {
             Debug.Log("UI Manager is NULL");
+        }
+
+        if(_audioSource == null)
+        {
+            Debug.Log("Audio Source is NULL");
+        }
+        else
+        {
+            _audioSource.clip = _audioClips[0];
         }
 
         _uIManager.updateLives(_lives);
@@ -107,6 +119,9 @@ public class Player : MonoBehaviour
             {
                 Instantiate(_laserPrefab, new Vector3(transform.position.x, transform.position.y + offset, 0), Quaternion.identity);
             }
+
+            _audioSource.clip = _audioClips[0];
+            _audioSource.Play();
             
         }
 
@@ -147,12 +162,14 @@ public class Player : MonoBehaviour
 
     public void setTripleShotActive()
     {
+        playPowerUpSound();
         _isTripleActive = true;
         StartCoroutine(PowerDownTripleShot());
     }
 
     public void activatePowerUpSpeed()
     {
+        playPowerUpSound();
         _isSpeedBoostActive = true;
         _speed = 8f;
         StartCoroutine(PowerDownSpeedPowerUp());
@@ -160,6 +177,7 @@ public class Player : MonoBehaviour
 
     public void activatePowerUpShield()
     {
+        playPowerUpSound();
         _isShieldActive = true;
         _playerShield.SetActive(_isShieldActive);
     }
@@ -197,5 +215,10 @@ public class Player : MonoBehaviour
         _uIManager.updateLives(currentLives);
     }
 
+    private void playPowerUpSound()
+    {
+        _audioSource.clip = _audioClips[1];
+        _audioSource.Play();
+    }
 }
  

@@ -11,10 +11,15 @@ public class Enemy : MonoBehaviour
     private Player _player;
 
     private Animator _enemyAnimator;
+
+    [SerializeField]
+    private AudioClip _explosionAudioClip;
+    private AudioSource _audioSource;
     void Start()
     {
         _enemyAnimator = GetComponent<Animator>();
         _player = GameObject.Find("Player").GetComponent<Player>();
+        _audioSource = GetComponent<AudioSource>();
 
         if(_player == null)
         {
@@ -24,6 +29,15 @@ public class Enemy : MonoBehaviour
         if(_enemyAnimator == null)
         {
             Debug.Log("Enemy Animator is NULL");
+        }
+
+        if(_audioSource == null)
+        {
+            Debug.Log("AudioSource is NULL");
+        }
+        else
+        {
+            _audioSource.clip = _explosionAudioClip;
         }
     }
 
@@ -77,6 +91,7 @@ private void OnTriggerEnter2D(Collider2D collision){
 
     private void DestroyEnemy()
     {
+        _audioSource.Play();
         _enemyAnimator.SetTrigger("onEnemyDeath");
         _speed = 0f;
         Destroy(gameObject, 2.45f);
